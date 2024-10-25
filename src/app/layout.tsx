@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import "./globals.css";
+import "@/config/globals.css";
+import { ThemeProvider } from "@/layouts/provider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -28,8 +29,10 @@ export default function RootLayout({
         <meta property='og:type' content='website' />
         <link rel='icon' href='/favicon.ico' sizes='any' />
       </head>
-      <body className='max-w-[32rem] w-full min-h-screen mr-auto ml-auto'>
-        {children}
+      <body className='font-pretendard flex min-h-screen flex-col'>
+        <ThemeProvider>
+          <main className='mt-[64px] flex flex-1 flex-col'>{children}</main>
+        </ThemeProvider>
       </body>
     </html>
   );
