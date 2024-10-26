@@ -6,7 +6,6 @@ import { HeadingItem } from "@/config/types";
 import { cn } from "@/lib/utils";
 import { ScrollToComment, ScrollTop } from "../common/tocButtons";
 import { useHeadingsObserver } from "@/hook/useHeadingsObserver";
-import CopyLinkButton from "../common/copyLinkButton";
 
 interface Props {
   toc: HeadingItem[];
@@ -43,7 +42,7 @@ const TableOfContent = ({ toc }: Props) => {
         <div className='flex gap-2'>
           <ScrollTop />
           <ScrollToComment />
-          <CopyLinkButton />
+          {/* <CopyLinkButton /> */}
         </div>
       </div>
     </aside>
