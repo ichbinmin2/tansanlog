@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "@/config/globals.css";
 import { ThemeProvider } from "@/layouts/provider";
+import { ThemeHeader } from "@/layouts/header";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -13,7 +14,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en'>
+    <html
+      lang='en'
+      className='h-full scroll-my-20 scroll-smooth'
+      suppressHydrationWarning
+    >
       <head>
         <meta
           name='viewport'
@@ -31,6 +36,7 @@ export default function RootLayout({
       </head>
       <body className='font-pretendard flex min-h-screen flex-col'>
         <ThemeProvider>
+          <ThemeHeader />
           <main className='mt-[64px] flex flex-1 flex-col'>{children}</main>
         </ThemeProvider>
       </body>
