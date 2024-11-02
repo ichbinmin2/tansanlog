@@ -37,7 +37,7 @@ export default function RootLayout({
       <body className='font-pretendard flex min-h-screen flex-col'>
         <ThemeProvider>
           <ThemeHeader />
-          <main className='mt-[64px] flex flex-1 flex-col'>{children}</main>
+          <main className='flex flex-1 flex-col'>{children}</main>
         </ThemeProvider>
       </body>
     </html>

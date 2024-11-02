@@ -39,7 +39,7 @@ export const Graphic = () => {
         position: [5, 5, 5],
       }}
     >
-      <OrbitControls />
+      {/* <OrbitControls /> */}
       <ambientLight intensity={1} />
 
       <GraphicMesh />
