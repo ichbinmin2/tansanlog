@@ -17,12 +17,14 @@ const PostListPage = async ({ category }: PostListProps) => {
   const mainPost = postList.filter((item, i) => i !== 0);
 
   return (
-    <section className='mx-auto mt-12 w-full max-w-[950px] px-4'>
-      {postList.map((post, index) => {
-        if (index === 0) {
-          return <Preview key={post.url + post.date} post={post} />;
-        }
-      })}
+    <section className='mx-auto mt-12 w-full max-w-[1200px] px-4'>
+      <div className='mx-auto max-w-[960px]'>
+        {postList.map((post, index) => {
+          if (index === 0) {
+            return <Preview key={post.url + post.date} post={post} />;
+          }
+        })}
+      </div>
 
       <div className='mt-10'>
         <CategoryList
@@ -32,7 +34,7 @@ const PostListPage = async ({ category }: PostListProps) => {
         />
       </div>
       <section>
-        <ul className='grid grid-cols-1 gap-8 md:grid-cols-2 lg:gap-12'>
+        <ul className='grid grid-cols-1 gap-8 md:grid-cols-3 lg:gap-12'>
           {mainPost.map((post) => (
             <Preview key={post.url + post.date} post={post} />
           ))}

@@ -13,6 +13,9 @@ export const ThemeHeader = () => {
             <h1>Post</h1>
           </Link>
           <Link href=''>
+            <h1>Study</h1>
+          </Link>
+          <Link href=''>
             <h1>Resume</h1>
           </Link>
         </div>
