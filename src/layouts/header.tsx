@@ -9,12 +9,16 @@ export const ThemeHeader = () => {
           <Link href='/'>
             <h1>Home</h1>
           </Link>
+          <Link href='/about'>
+            <h1>About</h1>
+          </Link>
           <Link href='/blog'>
             <h1>Post</h1>
           </Link>
           <Link href=''>
             <h1>Study</h1>
           </Link>
+
           <Link href=''>
             <h1>Resume</h1>
           </Link>
