@@ -17,7 +17,7 @@ const PostListPage = async ({ category }: PostListProps) => {
   const mainPost = postList.filter((item, i) => i !== 0);
 
   return (
-    <section className='mx-auto mt-12 w-full max-w-[1200px] px-4'>
+    <section className='mx-auto mt-40 mb-24 w-full max-w-[1200px] px-4'>
       <div className='mx-auto max-w-[960px]'>
         {postList.map((post, index) => {
           if (index === 0) {
