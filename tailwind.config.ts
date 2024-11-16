@@ -2,19 +2,23 @@ import type { Config } from "tailwindcss";
 
 const config = {
   darkMode: ["class"],
-  content: ["./src/**/*.{ts,tsx}"],
+  content: ["./src/**/*.{js,ts,jsx,tsx}"],
   prefix: "",
   theme: {
     container: {
       center: true,
       padding: "2rem",
       screens: {
+        xxs: "580px",
         "2xl": "1400px",
       },
     },
     extend: {
       fontFamily: {
         pretendard: ["Pretendard"],
+      },
+      screens: {
+        xxs: "580px", // 일반 반응형 클래스에 사용할 브레이크포인트 추가
       },
       colors: {
         border: "hsl(var(--border))",
