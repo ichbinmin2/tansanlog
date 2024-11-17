@@ -6,6 +6,7 @@ interface Props {
   displayName: string;
   href: string;
   count: number;
+  type?: string;
 }
 
 export const CategoryButton = ({
@@ -13,10 +14,15 @@ export const CategoryButton = ({
   displayName,
   href,
   count,
+  type,
 }: Props) => {
   return (
     <li>
-      <Button asChild size='sm' variant={isCurrent ? "default" : "ghost"}>
+      <Button
+        asChild
+        size={type ? "fl" : "sm"}
+        variant={isCurrent ? "default" : "ghost"}
+      >
         <Link href={href}>
           {displayName} ({count})
         </Link>
