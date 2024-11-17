@@ -15,13 +15,13 @@ export const ThemeHeader = () => {
           <Link href='/blog'>
             <h1>Post</h1>
           </Link>
-          <Link href=''>
+          <Link href='/study'>
             <h1>Study</h1>
           </Link>
         </div>
         <div className='flex justify-end items-center gap-2'>
           <Link href='https://decisive-aftermath-f41.notion.site/Front-end-Developer-11684f40191d80d19081d54133a34517?pvs=4'>
-            <div className='border-solid border-[1px] border-black rounded-lg p-1 flex justify-center items-center'>
+            <div className='border-solid border-[1px] border-black rounded-lg p-1 flex justify-center items-center hover:bg-accent hover:text-accent-foreground'>
               <span className='text-xs'>Resume</span>
             </div>
           </Link>
