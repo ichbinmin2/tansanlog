@@ -97,6 +97,13 @@ export const getCategoryList = () => {
   return cgList;
 };
 
+export const getLatestPost = async (): Promise<Post | null> => {
+  const postList = await getPostList(); // 전체 포스트를 가져옴
+  const sortedPostList = sortPostList(postList); // 날짜 기준으로 최신순 정렬
+
+  return sortedPostList.length > 0 ? sortedPostList[0] : null; // 최신 포스트 반환
+};
+
 export const getCategoryDetailList = async () => {
   const postList = await getPostList();
   const result: { [key: string]: number } = {};
