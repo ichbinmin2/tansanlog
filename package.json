@@ -16,6 +16,7 @@
     "@react-three/fiber": "^8.17.10",
     "@types/mdx": "^2.0.13",
     "@types/three": "^0.169.0",
+    "axios": "^1.7.7",
     "chart.js": "^4.4.6",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
