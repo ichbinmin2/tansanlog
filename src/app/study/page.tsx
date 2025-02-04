@@ -1,5 +1,5 @@
-import LineChart from "@/components/study/chart";
+import { StudyChart } from "@/components/study/study";
 
 export default function StudyPage() {
-  return <LineChart />;
+  return <StudyChart />;
 }

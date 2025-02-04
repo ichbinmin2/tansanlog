@@ -7,6 +7,7 @@ import * as THREE from "three";
 
 export const GraphicMesh = () => {
   const torusKnotRef = useRef<THREE.Mesh>(null);
+
   // 이미지 경로
   const matcap1 = useTexture("./main/images/matcap1.jpg");
 
