@@ -36,9 +36,9 @@ const PostListPage = async ({ category }: PostListProps) => {
       </div>
       <section>
         <ul className='grid grid-cols-1 gap-8 md:grid-cols-3 lg:gap-12'>
-          {firstPost?.url && (
-            <Preview key={firstPost.url + firstPost.date} post={firstPost} />
-          )}
+          {postList.map((post) => (
+            <Preview key={post.url + post.date} post={post} />
+          ))}
         </ul>
       </section>
     </section>
