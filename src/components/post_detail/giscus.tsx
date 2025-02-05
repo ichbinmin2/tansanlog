@@ -13,7 +13,7 @@ export default function Giscus() {
   const { resolvedTheme } = useTheme();
 
   // https://github.com/giscus/giscus/tree/main/styles/themes
-  const theme = resolvedTheme === "dark" ? "dark" : "light";
+  const theme = resolvedTheme === "dark" ? "light" : "light";
 
   useEffect(() => {
     if (!ref.current || ref.current.hasChildNodes()) return;
