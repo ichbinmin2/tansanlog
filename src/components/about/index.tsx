@@ -155,7 +155,7 @@ export default function About() {
             </p>
             <div className='flex flex-col xxs:ol-span-2 gap-1'>
               <Link
-                href='https://dev-fe.keep-in-touch.me/'
+                href='https://decisive-aftermath-f41.notion.site/12884f40191d804caf64d1957abb3a93?pvs=4'
                 className='flex justify-start items-center gap-1'
               >
                 <h2 className='font-medium text-sm inline'>
