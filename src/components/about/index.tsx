@@ -151,7 +151,7 @@ export default function About() {
           <h2 className='font-medium'>Side Projects</h2>
           <div className='grid grid-cols-1 xxs:grid-cols-[1fr_3fr] gap-1'>
             <p className='text-sm xxs:col-span-1 text-neutral-500'>
-              2024.9 - (ing)
+              2024.9 - 2024.1
             </p>
             <div className='flex flex-col xxs:ol-span-2 gap-1'>
               <Link
