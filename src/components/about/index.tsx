@@ -185,7 +185,7 @@ export default function About() {
             </p>
             <div className='flex flex-col xxs:ol-span-2 gap-1'>
               <Link
-                href='https://tasanlog.vercel.app/'
+                href='https://tansanlog.vercel.app/'
                 className='flex justify-start items-center gap-1'
               >
                 <h2 className='font-medium text-sm hover:underline transition duration-300 ease-in-out'>
