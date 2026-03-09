@@ -15,9 +15,9 @@ export const ThemeHeader = () => {
           <Link href='/blog'>
             <h1>Post</h1>
           </Link>
-          <Link href='/study'>
+          {/* <Link href='/study'>
             <h1>Study</h1>
-          </Link>
+          </Link> */}
         </div>
         <div className='flex justify-end items-center gap-2'>
           <Link href='https://decisive-aftermath-f41.notion.site/Front-end-Developer-11684f40191d80d19081d54133a34517?pvs=4'>
