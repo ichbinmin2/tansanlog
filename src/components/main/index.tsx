@@ -1,4 +1,4 @@
-import { ArrowRight, FileText, Github } from "lucide-react";
+import { ArrowRight, FileText, Github, LockKeyhole } from "lucide-react";
 import Link from "next/link";
 
 import { getSortedPostList } from "@/lib/post";
@@ -66,6 +66,13 @@ export const Main = async () => {
               className='inline-flex h-11 items-center gap-2 rounded-md border px-5 text-sm font-medium transition hover:bg-accent'
             >
               글 읽기
+            </Link>
+            <Link
+              href='/admin'
+              className='inline-flex h-11 items-center gap-2 rounded-md border px-5 text-sm font-medium text-neutral-600 transition hover:bg-accent hover:text-neutral-950 dark:text-neutral-300 dark:hover:text-white'
+            >
+              <LockKeyhole size={16} />
+              Admin
             </Link>
           </div>
         </div>
