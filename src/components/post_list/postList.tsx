@@ -11,13 +11,6 @@ const PostListPage = async ({ category }: PostListProps) => {
   const postList = await getSortedPostList(category);
   const categoryList = await getCategoryDetailList();
   const [featuredPost, ...remainingPosts] = postList;
-  const visibleCategoryList = categoryList.map((item) => ({
-    ...item,
-    count:
-      item.dirName === featuredPost?.categoryPath
-        ? Math.max(0, item.count - 1)
-        : item.count,
-  }));
 
   return (
     <section className='mx-auto mt-40 mb-24 w-full max-w-[1200px] px-4'>
@@ -29,8 +22,8 @@ const PostListPage = async ({ category }: PostListProps) => {
 
       <div className='mt-10'>
         <CategoryList
-          allPostCount={remainingPosts.length}
-          categoryList={visibleCategoryList}
+          allPostCount={postList.length}
+          categoryList={categoryList}
           currentCategory={category}
         />
       </div>
