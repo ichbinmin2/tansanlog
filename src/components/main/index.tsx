@@ -38,7 +38,6 @@ const projects = [
 export const Main = async () => {
   const sortedPosts = getUniquePostList(await getSortedPostList());
   const latestPost = sortedPosts[0];
-  const latestPosts = sortedPosts.slice(1, 4);
   const hasLatestPostThumbnail = latestPost?.thumbnail?.trim() !== "";
 
   return (
@@ -186,44 +185,6 @@ export const Main = async () => {
             </article>
           ))}
         </div>
-      </section>
-
-      <section className='mt-20'>
-        <div className='mb-8 flex items-end justify-between gap-4'>
-          <div>
-            <p className='text-sm font-semibold text-green-700'>Latest Posts</p>
-            <h2 className='mt-2 text-2xl font-semibold'>최근 기록</h2>
-          </div>
-          <Link
-            href='/blog'
-            className='inline-flex items-center gap-1 text-sm font-medium text-neutral-600 hover:text-neutral-950 dark:text-neutral-300 dark:hover:text-white'
-          >
-            블로그
-            <ArrowRight size={15} />
-          </Link>
-        </div>
-        {latestPosts.length > 0 && (
-          <div className='divide-y rounded-md border'>
-            {latestPosts.map((post) => (
-              <Link
-                key={post.url}
-                href={post.url}
-                className='grid gap-2 p-5 transition hover:bg-accent sm:grid-cols-[1fr_auto] sm:items-center'
-              >
-                <div>
-                  <p className='text-xs font-medium text-green-700'>
-                    {post.categoryPublicName}
-                  </p>
-                  <h3 className='mt-2 font-semibold'>{post.title}</h3>
-                  <p className='mt-2 line-clamp-2 text-sm leading-6 text-neutral-600 dark:text-neutral-300'>
-                    {post.desc}
-                  </p>
-                </div>
-                <p className='text-sm text-neutral-500'>{post.dateString}</p>
-              </Link>
-            ))}
-          </div>
-        )}
       </section>
 
       <section className='mt-20 flex flex-col gap-5 rounded-md border bg-neutral-950 p-6 text-white sm:flex-row sm:items-center sm:justify-between'>
