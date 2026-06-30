@@ -22,7 +22,7 @@ export async function generateMetadata({
 }: Props): Promise<Metadata> {
   const cg = getCategoryPublicName(category);
   const title = `${cg} | ${blogName}`;
-  const url = `${baseDomain}/${category}`;
+  const url = `${baseDomain}/blog/${category}`;
 
   return {
     title,

@@ -3,7 +3,6 @@ import Preview from "./preview";
 import {
   getAllPostCount,
   getCategoryDetailList,
-  getLatestPost,
   getSortedPostList,
 } from "@/lib/post";
 
@@ -15,7 +14,6 @@ const PostListPage = async ({ category }: PostListProps) => {
   const postList = await getSortedPostList(category);
   const categoryList = await getCategoryDetailList();
   const allPostCount = await getAllPostCount();
-  const firstPost = await getLatestPost();
 
   return (
     <section className='mx-auto mt-40 mb-24 w-full max-w-[1200px] px-4'>
@@ -36,9 +34,9 @@ const PostListPage = async ({ category }: PostListProps) => {
       </div>
       <section>
         <ul className='grid grid-cols-1 gap-8 md:grid-cols-3 lg:gap-12'>
-          {postList.map((post) => (
-            <Preview key={post.url + post.date} post={post} />
-          ))}
+          {postList.map((post) => {
+            return <Preview key={post.url + post.date} post={post} />;
+          })}
         </ul>
       </section>
     </section>

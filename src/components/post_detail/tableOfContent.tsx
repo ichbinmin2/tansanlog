@@ -23,7 +23,6 @@ const TableOfContent = ({ toc }: Props) => {
             {toc.map((item) => {
               const isH3 = item.indent === 1;
               const isIntersecting = activeIdList.includes(item.link);
-              console.log("isIntersecting", isIntersecting);
               return (
                 <li
                   key={item.link}

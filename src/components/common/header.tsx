@@ -7,16 +7,16 @@ export const ThemeHeader = () => {
       <div className='flex justify-between items-center py-7 gap-5 border-b mx-7 border-gray-500'>
         <div className='flex justify-start items-center gap-5'>
           <Link href='/'>
-            <h1>Home</h1>
+            <span>Home</span>
           </Link>
           <Link href='/about'>
-            <h1>About</h1>
+            <span>About</span>
           </Link>
           <Link href='/blog'>
-            <h1>Post</h1>
+            <span>Post</span>
           </Link>
           {/* <Link href='/study'>
-            <h1>Study</h1>
+            <span>Study</span>
           </Link> */}
         </div>
         <div className='flex justify-end items-center gap-2'>

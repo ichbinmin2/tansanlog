@@ -44,8 +44,10 @@ export const parsePostAbstract = (postPath: string) => {
 const parsePostDetail = async (postPath: string) => {
   const file = fs.readFileSync(postPath, "utf8");
   const { data, content } = matter(file);
+
   const grayMatter = data as PostMatter;
   const readingMinutes = Math.ceil(readingTime(content).minutes);
+
   const dateString = dayjs(grayMatter.date)
     .locale("ko")
     .format("YYYY년 MM월 DD일");

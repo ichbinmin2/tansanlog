@@ -10,7 +10,6 @@ interface ButtonProps {
 
 export const ScrollTop = ({ size = 16, className }: ButtonProps) => {
   const scrollTop = () => {
-    console.log("ScrollTop 클릭");
     window.scrollTo({ top: 0 });
   };
   return (
@@ -27,7 +26,6 @@ export const ScrollTop = ({ size = 16, className }: ButtonProps) => {
 
 export const ScrollToComment = ({ size = 16, className }: ButtonProps) => {
   const scrollToGiscus = () => {
-    console.log("ScrollToComment 클릭");
     document.querySelector(".giscus")?.scrollIntoView();
   };
 
