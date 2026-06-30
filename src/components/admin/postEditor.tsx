@@ -18,6 +18,7 @@ import {
   Italic,
   List,
   ListOrdered,
+  LogOut,
   Save,
   Video,
 } from "lucide-react";
@@ -78,12 +79,21 @@ export const PostEditor = () => {
   const [draft, setDraft] = useState<BlogDraft>(() => createDefaultDraft());
   const [assets, setAssets] = useState<EditorAsset[]>([]);
   const [message, setMessage] = useState("");
-  const [editorMode, setEditorMode] = useState<"write" | "preview">("write");
+  const [saveStep, setSaveStep] = useState<"idle" | "saved" | "downloaded">(
+    "idle"
+  );
+  const [editorMode, setEditorMode] = useState<"write" | "preview" | "source">(
+    "write"
+  );
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
 
   const mdx = useMemo(() => buildMdx(draft), [draft]);
   const postPath = useMemo(() => buildPostPath(draft), [draft]);
+  const firstBodyImage = useMemo(
+    () => draft.body.match(/!\[[^\]]*]\(([^)]+)\)/)?.[1] || "",
+    [draft.body]
+  );
 
   useEffect(() => {
     const savedDraft = window.localStorage.getItem(ADMIN_DRAFT_STORAGE_KEY);
@@ -201,6 +211,7 @@ export const PostEditor = () => {
     link.download = "content.mdx";
     link.click();
     URL.revokeObjectURL(url);
+    setSaveStep("downloaded");
     setMessage(`${postPath} 위치에 넣을 content.mdx를 다운로드했습니다.`);
   };
 
@@ -247,10 +258,26 @@ export const PostEditor = () => {
     }
 
     setMessage(`프로젝트 폴더에 ${postPath} 파일을 저장했습니다.`);
+    setSaveStep("saved");
   };
 
   const applyTitleToSlug = () => {
     updateDraft({ slug: createSlug(draft.title) });
+  };
+
+  const applyFirstImageAsThumbnail = () => {
+    if (!firstBodyImage) {
+      setMessage("본문에서 먼저 이미지를 추가해주세요.");
+      return;
+    }
+
+    updateDraft({ thumbnail: firstBodyImage });
+    setMessage("본문의 첫 번째 이미지를 썸네일로 설정했습니다.");
+  };
+
+  const logout = async () => {
+    await fetch("/api/admin/logout", { method: "POST" });
+    window.location.href = "/admin/login";
   };
 
   return (
@@ -282,6 +309,10 @@ export const PostEditor = () => {
           <Button onClick={saveToProject}>
             <Save className='mr-2 size-4' />
             프로젝트에 저장
+          </Button>
+          <Button variant='ghost' onClick={logout}>
+            <LogOut className='mr-2 size-4' />
+            로그아웃
           </Button>
         </div>
       </div>
@@ -344,6 +375,15 @@ export const PostEditor = () => {
               className='mt-2 h-10 w-full rounded-md border bg-background px-3 text-sm'
               placeholder='/posts/diary/image.png'
             />
+            <Button
+              type='button'
+              variant='outline'
+              size='sm'
+              className='mt-2'
+              onClick={applyFirstImageAsThumbnail}
+            >
+              첫 이미지로 설정
+            </Button>
           </label>
           <div className='rounded-md border bg-secondary p-4 text-sm leading-7 lg:col-span-2'>
             <p className='font-medium'>저장 위치</p>
@@ -356,6 +396,20 @@ export const PostEditor = () => {
                 public/posts/{draft.category}/ 경로에 함께 저장됩니다.
               </p>
             )}
+          </div>
+          <div className='rounded-md border p-4 text-sm leading-7 lg:col-span-2'>
+            <p className='font-medium'>저장 후 체크</p>
+            <ul className='mt-2 space-y-1 text-neutral-600 dark:text-neutral-300'>
+              <li>
+                {saveStep === "saved" || saveStep === "downloaded" ? "✓" : "○"}{" "}
+                content.mdx 생성
+              </li>
+              <li>
+                {assets.length > 0 && saveStep === "saved" ? "✓" : "○"} 이미지{" "}
+                {assets.length}개 저장 확인
+              </li>
+              <li>○ git commit / push 후 배포 확인</li>
+            </ul>
           </div>
           {message && (
             <p className='rounded-md border border-green-200 bg-green-50 p-3 text-sm text-green-800 lg:col-span-4'>
@@ -448,6 +502,13 @@ export const PostEditor = () => {
               >
                 미리보기
               </Button>
+              <Button
+                variant={editorMode === "source" ? "secondary" : "ghost"}
+                size='sm'
+                onClick={() => setEditorMode("source")}
+              >
+                MDX 원문
+              </Button>
             </div>
             <input
               ref={imageInputRef}
@@ -479,6 +540,15 @@ export const PostEditor = () => {
             >
               <PreviewRenderer draft={draft} mode='body' />
             </div>
+            <pre
+              className={
+                editorMode === "source"
+                  ? "min-h-[760px] overflow-auto whitespace-pre-wrap rounded-md border bg-neutral-950 p-5 text-sm leading-7 text-neutral-50"
+                  : "hidden"
+              }
+            >
+              {mdx}
+            </pre>
           </div>
         </div>
       </div>

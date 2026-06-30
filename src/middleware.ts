@@ -1,65 +1,40 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const ADMIN_PATH_PREFIX = "/admin";
+const ADMIN_LOGIN_PATH = "/admin/login";
+const ADMIN_SESSION_COOKIE = "tansanlog_admin_session";
 
-const createUnauthorizedResponse = () =>
-  new NextResponse("Authentication required", {
-    status: 401,
-    headers: {
-      "WWW-Authenticate": 'Basic realm="Tansanlog Admin"',
-    },
-  });
-
-const parseBasicAuth = (authorization: string | null) => {
-  if (!authorization?.startsWith("Basic ")) return null;
-
-  const encoded = authorization.slice("Basic ".length);
-  let decoded = "";
-
-  try {
-    decoded = atob(encoded);
-  } catch {
-    return null;
-  }
-
-  const separatorIndex = decoded.indexOf(":");
-
-  if (separatorIndex === -1) return null;
-
-  return {
-    username: decoded.slice(0, separatorIndex),
-    password: decoded.slice(separatorIndex + 1),
-  };
-};
+const getSessionSecret = () =>
+  process.env.ADMIN_SESSION_SECRET || process.env.ADMIN_PASSWORD || "";
 
 export function middleware(request: NextRequest) {
   if (!request.nextUrl.pathname.startsWith(ADMIN_PATH_PREFIX)) {
     return NextResponse.next();
   }
 
-  const adminUsername = process.env.ADMIN_USERNAME;
-  const adminPassword = process.env.ADMIN_PASSWORD;
+  const sessionSecret = getSessionSecret();
+  const isLoginPage = request.nextUrl.pathname === ADMIN_LOGIN_PATH;
 
-  if (!adminUsername || !adminPassword) {
-    if (process.env.NODE_ENV !== "production") {
-      return NextResponse.next();
-    }
-
-    return new NextResponse("Admin credentials are not configured", {
-      status: 404,
-    });
+  if (!sessionSecret) {
+    return isLoginPage
+      ? NextResponse.next()
+      : NextResponse.redirect(new URL(ADMIN_LOGIN_PATH, request.url));
   }
 
-  const credentials = parseBasicAuth(request.headers.get("authorization"));
+  const session = request.cookies.get(ADMIN_SESSION_COOKIE)?.value;
+  const isAuthenticated = session === sessionSecret;
 
-  if (
-    credentials?.username === adminUsername &&
-    credentials.password === adminPassword
-  ) {
-    return NextResponse.next();
+  if (isLoginPage) {
+    return isAuthenticated
+      ? NextResponse.redirect(new URL(ADMIN_PATH_PREFIX, request.url))
+      : NextResponse.next();
   }
 
-  return createUnauthorizedResponse();
+  if (isAuthenticated) return NextResponse.next();
+
+  const loginUrl = new URL(ADMIN_LOGIN_PATH, request.url);
+  loginUrl.searchParams.set("next", request.nextUrl.pathname);
+  return NextResponse.redirect(loginUrl);
 }
 
 export const config = {

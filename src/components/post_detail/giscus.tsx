@@ -57,7 +57,16 @@ export default function Giscus() {
     );
   }, [hasGiscusConfig, theme]);
 
-  if (!hasGiscusConfig) return null;
+  if (!hasGiscusConfig) {
+    if (process.env.NODE_ENV !== "development") return null;
+
+    return (
+      <section className='not-prose rounded-md border border-yellow-200 bg-yellow-50 p-4 text-sm leading-6 text-yellow-900'>
+        Giscus 설정이 비어 있습니다. 댓글을 확인하려면
+        NEXT_PUBLIC_GISCUS_REPO_NAME, REPO_ID, CATEGORY_ID를 설정해주세요.
+      </section>
+    );
+  }
 
   return <section ref={ref} className='giscus' />;
 }

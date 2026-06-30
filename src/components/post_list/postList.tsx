@@ -1,10 +1,7 @@
 import CategoryList from "./categoryList";
 import Preview from "./preview";
-import {
-  getAllPostCount,
-  getCategoryDetailList,
-  getSortedPostList,
-} from "@/lib/post";
+import SearchablePostGrid from "./searchablePostGrid";
+import { getCategoryDetailList, getSortedPostList } from "@/lib/post";
 
 interface PostListProps {
   category?: string;
@@ -13,8 +10,14 @@ interface PostListProps {
 const PostListPage = async ({ category }: PostListProps) => {
   const postList = await getSortedPostList(category);
   const categoryList = await getCategoryDetailList();
-  const allPostCount = await getAllPostCount();
   const [featuredPost, ...remainingPosts] = postList;
+  const visibleCategoryList = categoryList.map((item) => ({
+    ...item,
+    count:
+      item.dirName === featuredPost?.categoryPath
+        ? Math.max(0, item.count - 1)
+        : item.count,
+  }));
 
   return (
     <section className='mx-auto mt-40 mb-24 w-full max-w-[1200px] px-4'>
@@ -26,18 +29,12 @@ const PostListPage = async ({ category }: PostListProps) => {
 
       <div className='mt-10'>
         <CategoryList
-          allPostCount={allPostCount}
-          categoryList={categoryList}
+          allPostCount={remainingPosts.length}
+          categoryList={visibleCategoryList}
           currentCategory={category}
         />
       </div>
-      <section>
-        <ul className='grid grid-cols-1 gap-8 md:grid-cols-3 lg:gap-12'>
-          {remainingPosts.map((post) => {
-            return <Preview key={post.url + post.date} post={post} />;
-          })}
-        </ul>
-      </section>
+      <SearchablePostGrid posts={remainingPosts} />
     </section>
   );
 };
