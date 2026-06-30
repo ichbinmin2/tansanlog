@@ -78,6 +78,7 @@ export const PostEditor = () => {
   const [draft, setDraft] = useState<BlogDraft>(() => createDefaultDraft());
   const [assets, setAssets] = useState<EditorAsset[]>([]);
   const [message, setMessage] = useState("");
+  const [editorMode, setEditorMode] = useState<"write" | "preview">("write");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
 
@@ -272,6 +273,12 @@ export const PostEditor = () => {
             <Download className='mr-2 size-4' />
             MDX 다운로드
           </Button>
+          <Button asChild variant='outline'>
+            <Link href='/admin/preview'>
+              <Eye className='mr-2 size-4' />
+              전체 미리보기
+            </Link>
+          </Button>
           <Button onClick={saveToProject}>
             <Save className='mr-2 size-4' />
             프로젝트에 저장
@@ -279,8 +286,8 @@ export const PostEditor = () => {
         </div>
       </div>
 
-      <div className='grid gap-6 lg:grid-cols-[420px_1fr]'>
-        <aside className='space-y-4'>
+      <div className='space-y-6'>
+        <aside className='grid gap-4 rounded-md border p-4 lg:grid-cols-4'>
           <label className='block text-sm font-medium'>
             제목
             <input
@@ -290,7 +297,7 @@ export const PostEditor = () => {
               placeholder='글 제목'
             />
           </label>
-          <label className='block text-sm font-medium'>
+          <label className='block text-sm font-medium lg:col-span-2'>
             설명
             <input
               value={draft.desc}
@@ -299,25 +306,23 @@ export const PostEditor = () => {
               placeholder='목록과 메타데이터에 보일 설명'
             />
           </label>
-          <div className='grid grid-cols-2 gap-3'>
-            <label className='block text-sm font-medium'>
-              카테고리
-              <input
-                value={draft.category}
-                onChange={updateField("category")}
-                className='mt-2 h-10 w-full rounded-md border bg-background px-3 text-sm'
-              />
-            </label>
-            <label className='block text-sm font-medium'>
-              날짜
-              <input
-                type='date'
-                value={draft.date}
-                onChange={updateField("date")}
-                className='mt-2 h-10 w-full rounded-md border bg-background px-3 text-sm'
-              />
-            </label>
-          </div>
+          <label className='block text-sm font-medium'>
+            카테고리
+            <input
+              value={draft.category}
+              onChange={updateField("category")}
+              className='mt-2 h-10 w-full rounded-md border bg-background px-3 text-sm'
+            />
+          </label>
+          <label className='block text-sm font-medium'>
+            날짜
+            <input
+              type='date'
+              value={draft.date}
+              onChange={updateField("date")}
+              className='mt-2 h-10 w-full rounded-md border bg-background px-3 text-sm'
+            />
+          </label>
           <label className='block text-sm font-medium'>
             슬러그
             <div className='mt-2 flex gap-2'>
@@ -340,7 +345,7 @@ export const PostEditor = () => {
               placeholder='/posts/diary/image.png'
             />
           </label>
-          <div className='rounded-md border bg-secondary p-4 text-sm leading-7'>
+          <div className='rounded-md border bg-secondary p-4 text-sm leading-7 lg:col-span-2'>
             <p className='font-medium'>저장 위치</p>
             <p className='mt-2 break-all text-neutral-600 dark:text-neutral-300'>
               {postPath}
@@ -353,7 +358,7 @@ export const PostEditor = () => {
             )}
           </div>
           {message && (
-            <p className='rounded-md border border-green-200 bg-green-50 p-3 text-sm text-green-800'>
+            <p className='rounded-md border border-green-200 bg-green-50 p-3 text-sm text-green-800 lg:col-span-4'>
               {message}
             </p>
           )}
@@ -428,12 +433,22 @@ export const PostEditor = () => {
             <Button variant='ghost' size='icon' onClick={insertVideo}>
               <Video size={16} />
             </Button>
-            <Button asChild variant='outline' className='ml-auto'>
-              <Link href='/admin/preview'>
-                <Eye className='mr-2 size-4' />
-                전체 미리보기
-              </Link>
-            </Button>
+            <div className='ml-auto flex rounded-md border p-1'>
+              <Button
+                variant={editorMode === "write" ? "secondary" : "ghost"}
+                size='sm'
+                onClick={() => setEditorMode("write")}
+              >
+                작성
+              </Button>
+              <Button
+                variant={editorMode === "preview" ? "secondary" : "ghost"}
+                size='sm'
+                onClick={() => setEditorMode("preview")}
+              >
+                미리보기
+              </Button>
+            </div>
             <input
               ref={imageInputRef}
               type='file'
@@ -443,15 +458,25 @@ export const PostEditor = () => {
             />
           </div>
 
-          <div className='grid gap-4 xl:grid-cols-2'>
+          <div>
             <textarea
               ref={textareaRef}
               value={draft.body}
               onChange={updateField("body")}
-              className='min-h-[720px] w-full resize-y rounded-md border bg-background p-4 font-mono text-sm leading-7 outline-none focus:ring-2 focus:ring-ring'
+              className={
+                editorMode === "write"
+                  ? "min-h-[760px] w-full resize-y rounded-md border bg-background p-5 font-mono text-sm leading-7 outline-none focus:ring-2 focus:ring-ring"
+                  : "hidden"
+              }
               spellCheck={false}
             />
-            <div className='min-h-[720px] overflow-auto rounded-md border bg-background py-6'>
+            <div
+              className={
+                editorMode === "preview"
+                  ? "min-h-[760px] overflow-auto rounded-md border bg-background py-6"
+                  : "hidden"
+              }
+            >
               <PreviewRenderer draft={draft} mode='body' />
             </div>
           </div>

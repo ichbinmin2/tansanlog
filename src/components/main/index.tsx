@@ -1,4 +1,5 @@
-import { ArrowRight, FileText, Github, LockKeyhole } from "lucide-react";
+import { ArrowRight, Github, LockKeyhole, Mail } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 import { getSortedPostList } from "@/lib/post";
@@ -37,7 +38,8 @@ const projects = [
 export const Main = async () => {
   const sortedPosts = await getSortedPostList();
   const latestPost = sortedPosts[0];
-  const latestPosts = sortedPosts.slice(0, 3);
+  const latestPosts = sortedPosts.slice(1, 4);
+  const hasLatestPostThumbnail = latestPost?.thumbnail?.trim() !== "";
 
   return (
     <div className='mx-auto w-full max-w-6xl px-5 pb-24 pt-16 sm:px-8 lg:pt-24'>
@@ -105,30 +107,57 @@ export const Main = async () => {
       </section>
 
       {latestPost && (
-        <section className='mt-16 rounded-md border bg-secondary p-5 sm:p-7'>
-          <div className='grid gap-5 md:grid-cols-[1fr_auto] md:items-center'>
-            <div>
-              <p className='text-sm font-semibold text-green-700'>
-                Latest Article
-              </p>
-              <h2 className='mt-3 text-2xl font-semibold'>
-                {latestPost.title}
-              </h2>
-              <p className='mt-3 max-w-3xl text-sm leading-7 text-neutral-600 dark:text-neutral-300'>
-                {latestPost.desc}
-              </p>
-              <p className='mt-4 text-xs text-neutral-500'>
-                {latestPost.categoryPublicName} · {latestPost.dateString} ·{" "}
-                {latestPost.readingMinutes}분
-              </p>
+        <section className='mt-16 overflow-hidden rounded-md border bg-secondary'>
+          <div className='grid gap-0 lg:grid-cols-[0.9fr_1.1fr]'>
+            <div className='relative min-h-[220px] border-b lg:border-b-0 lg:border-r'>
+              {hasLatestPostThumbnail ? (
+                <Image
+                  src={latestPost.thumbnail}
+                  alt={`thumbnail for ${latestPost.title}`}
+                  fill
+                  sizes='(max-width: 1024px) 100vw, 440px'
+                  className='object-cover'
+                />
+              ) : (
+                <div className='flex h-full min-h-[220px] flex-col justify-between bg-[linear-gradient(135deg,#f7fee7,#f4f4f5)] p-6 dark:bg-[linear-gradient(135deg,#14532d,#18181b)]'>
+                  <span className='text-xs font-semibold uppercase tracking-[0.22em] text-green-700 dark:text-green-300'>
+                    No Thumbnail
+                  </span>
+                  <div>
+                    <p className='text-sm text-neutral-500 dark:text-neutral-300'>
+                      {latestPost.categoryPublicName}
+                    </p>
+                    <p className='mt-2 text-2xl font-semibold text-neutral-950 dark:text-white'>
+                      {latestPost.title}
+                    </p>
+                  </div>
+                </div>
+              )}
             </div>
-            <Link
-              href={latestPost.url}
-              className='inline-flex h-11 items-center justify-center gap-2 rounded-md bg-neutral-950 px-5 text-sm font-medium text-white transition hover:bg-neutral-800 dark:bg-white dark:text-neutral-950 dark:hover:bg-neutral-200'
-            >
-              최신 글 보기
-              <ArrowRight size={16} />
-            </Link>
+            <div className='grid gap-5 p-5 sm:p-7 md:grid-cols-[1fr_auto] md:items-center'>
+              <div>
+                <p className='text-sm font-semibold text-green-700'>
+                  Latest Article
+                </p>
+                <h2 className='mt-3 text-2xl font-semibold'>
+                  {latestPost.title}
+                </h2>
+                <p className='mt-3 max-w-3xl text-sm leading-7 text-neutral-600 dark:text-neutral-300'>
+                  {latestPost.desc}
+                </p>
+                <p className='mt-4 text-xs text-neutral-500'>
+                  {latestPost.categoryPublicName} · {latestPost.dateString} ·{" "}
+                  {latestPost.readingMinutes}분
+                </p>
+              </div>
+              <Link
+                href={latestPost.url}
+                className='inline-flex h-11 items-center justify-center gap-2 rounded-md bg-neutral-950 px-5 text-sm font-medium text-white transition hover:bg-neutral-800 dark:bg-white dark:text-neutral-950 dark:hover:bg-neutral-200'
+              >
+                최신 글 보기
+                <ArrowRight size={16} />
+              </Link>
+            </div>
           </div>
         </section>
       )}
@@ -180,26 +209,28 @@ export const Main = async () => {
             <ArrowRight size={15} />
           </Link>
         </div>
-        <div className='divide-y rounded-md border'>
-          {latestPosts.map((post) => (
-            <Link
-              key={post.url}
-              href={post.url}
-              className='grid gap-2 p-5 transition hover:bg-accent sm:grid-cols-[1fr_auto] sm:items-center'
-            >
-              <div>
-                <p className='text-xs font-medium text-green-700'>
-                  {post.categoryPublicName}
-                </p>
-                <h3 className='mt-2 font-semibold'>{post.title}</h3>
-                <p className='mt-2 line-clamp-2 text-sm leading-6 text-neutral-600 dark:text-neutral-300'>
-                  {post.desc}
-                </p>
-              </div>
-              <p className='text-sm text-neutral-500'>{post.dateString}</p>
-            </Link>
-          ))}
-        </div>
+        {latestPosts.length > 0 && (
+          <div className='divide-y rounded-md border'>
+            {latestPosts.map((post) => (
+              <Link
+                key={post.url}
+                href={post.url}
+                className='grid gap-2 p-5 transition hover:bg-accent sm:grid-cols-[1fr_auto] sm:items-center'
+              >
+                <div>
+                  <p className='text-xs font-medium text-green-700'>
+                    {post.categoryPublicName}
+                  </p>
+                  <h3 className='mt-2 font-semibold'>{post.title}</h3>
+                  <p className='mt-2 line-clamp-2 text-sm leading-6 text-neutral-600 dark:text-neutral-300'>
+                    {post.desc}
+                  </p>
+                </div>
+                <p className='text-sm text-neutral-500'>{post.dateString}</p>
+              </Link>
+            ))}
+          </div>
+        )}
       </section>
 
       <section className='mt-20 flex flex-col gap-5 rounded-md border bg-neutral-950 p-6 text-white sm:flex-row sm:items-center sm:justify-between'>
@@ -218,11 +249,11 @@ export const Main = async () => {
             GitHub
           </Link>
           <Link
-            href='https://decisive-aftermath-f41.notion.site/Front-end-Developer-11684f40191d80d19081d54133a34517?pvs=4'
+            href='mailto:teta1dev@gmail.com'
             className='inline-flex h-10 items-center gap-2 rounded-md border border-white/20 px-4 text-sm transition hover:bg-white hover:text-neutral-950'
           >
-            <FileText size={16} />
-            Resume
+            <Mail size={16} />
+            Email
           </Link>
         </div>
       </section>

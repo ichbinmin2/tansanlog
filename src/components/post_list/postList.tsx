@@ -14,16 +14,15 @@ const PostListPage = async ({ category }: PostListProps) => {
   const postList = await getSortedPostList(category);
   const categoryList = await getCategoryDetailList();
   const allPostCount = await getAllPostCount();
+  const [featuredPost, ...remainingPosts] = postList;
 
   return (
     <section className='mx-auto mt-40 mb-24 w-full max-w-[1200px] px-4'>
-      <div className='mx-auto max-w-[960px]'>
-        {postList.map((post, index) => {
-          if (index === 0) {
-            return <Preview key={post.url + post.date} post={post} />;
-          }
-        })}
-      </div>
+      {featuredPost && (
+        <div className='mx-auto max-w-[960px]'>
+          <Preview key={featuredPost.url + featuredPost.date} post={featuredPost} />
+        </div>
+      )}
 
       <div className='mt-10'>
         <CategoryList
@@ -34,7 +33,7 @@ const PostListPage = async ({ category }: PostListProps) => {
       </div>
       <section>
         <ul className='grid grid-cols-1 gap-8 md:grid-cols-3 lg:gap-12'>
-          {postList.map((post) => {
+          {remainingPosts.map((post) => {
             return <Preview key={post.url + post.date} post={post} />;
           })}
         </ul>

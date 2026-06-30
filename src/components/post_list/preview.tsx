@@ -9,20 +9,33 @@ interface Props {
 }
 
 const Preview = ({ post }: Props) => {
+  const hasThumbnail = post.thumbnail?.trim() !== "";
+
   return (
     <Link href={post.url}>
       <li className='flex h-full flex-col gap-3 overflow-hidden rounded-md border shadow-md transition hover:shadow-xl dark:border-slate-700 dark:hover:border-white'>
         <div className='relative aspect-video w-full rounded-t-md border-b'>
-          <Image
-            src={post.thumbnail}
-            alt={`thumbnail for ${post.title}`}
-            sizes='(max-width: 1000px) 50vw, 450px'
-            fill
-            priority
-            style={{
-              objectFit: "cover",
-            }}
-          />
+          {hasThumbnail ? (
+            <Image
+              src={post.thumbnail}
+              alt={`thumbnail for ${post.title}`}
+              sizes='(max-width: 1000px) 50vw, 450px'
+              fill
+              priority
+              style={{
+                objectFit: "cover",
+              }}
+            />
+          ) : (
+            <div className='flex h-full w-full flex-col justify-between bg-[linear-gradient(135deg,#f7fee7,#f4f4f5)] p-5 dark:bg-[linear-gradient(135deg,#14532d,#18181b)]'>
+              <span className='text-xs font-semibold uppercase tracking-[0.2em] text-green-700 dark:text-green-300'>
+                {post.categoryPublicName}
+              </span>
+              <span className='line-clamp-2 text-xl font-semibold text-neutral-900 dark:text-white'>
+                {post.title}
+              </span>
+            </div>
+          )}
         </div>
         <div className='flex flex-1 flex-col justify-between p-4 pt-1'>
           <div>

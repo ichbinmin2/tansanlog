@@ -7,15 +7,19 @@ import { useTheme } from "next-themes";
 const repoName = process.env.NEXT_PUBLIC_GISCUS_REPO_NAME || "";
 const repoId = process.env.NEXT_PUBLIC_GISCUS_REPO_ID || "";
 const categoryId = process.env.NEXT_PUBLIC_GISCUS_CATEGORY_ID || "";
+const isGiscusEnabled = process.env.NEXT_PUBLIC_GISCUS_ENABLED === "true";
 
 export default function Giscus() {
   const ref = useRef<HTMLDivElement>(null);
   const { resolvedTheme } = useTheme();
+  const hasGiscusConfig =
+    isGiscusEnabled && repoName !== "" && repoId !== "" && categoryId !== "";
 
   // https://github.com/giscus/giscus/tree/main/styles/themes
   const theme = resolvedTheme === "dark" ? "light" : "light";
 
   useEffect(() => {
+    if (!hasGiscusConfig) return;
     if (!ref.current || ref.current.hasChildNodes()) return;
 
     const scriptElem = document.createElement("script");
@@ -36,10 +40,12 @@ export default function Giscus() {
     scriptElem.setAttribute("data-lang", "ko");
 
     ref.current.appendChild(scriptElem);
-  }, [theme]);
+  }, [hasGiscusConfig, theme]);
 
   // https://github.com/giscus/giscus/blob/main/ADVANCED-USAGE.md#isetconfigmessage
   useEffect(() => {
+    if (!hasGiscusConfig) return;
+
     const iframe = document.querySelector<HTMLIFrameElement>(
       "iframe.giscus-frame"
     );
@@ -47,7 +53,9 @@ export default function Giscus() {
       { giscus: { setConfig: { theme } } },
       "https://giscus.app"
     );
-  }, [theme]);
+  }, [hasGiscusConfig, theme]);
 
-  return <section ref={ref} />;
+  if (!hasGiscusConfig) return null;
+
+  return <section ref={ref} className='giscus' />;
 }
