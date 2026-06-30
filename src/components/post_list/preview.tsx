@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Post } from "@/config/types";
-import { CalendarDays, Clock3 } from "lucide-react";
+import { CalendarDays } from "lucide-react";
 
 interface Props {
   post: Post;
@@ -77,14 +77,10 @@ const Preview = ({ post, variant = "default" }: Props) => {
               </p>
             )}
           </div>
-          <div className='flex justify-between gap-3 text-sm text-gray-500 dark:text-gray-400'>
+          <div className='flex gap-3 text-sm text-gray-500 dark:text-gray-400'>
             <div className='flex items-center gap-1'>
               <CalendarDays className='w-3.5' />
               <span>{post.dateString}</span>
-            </div>
-            <div className='flex items-center gap-1'>
-              <Clock3 className='w-3.5' />
-              <span>{post.readingMinutes}분</span>
             </div>
           </div>
         </div>

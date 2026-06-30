@@ -2,7 +2,7 @@ import { ArrowRight, Github, LockKeyhole, Mail } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-import { getSortedPostList } from "@/lib/post";
+import { getSortedPostList, getUniquePostList } from "@/lib/post";
 import { Graphic } from "./graphic/graphic";
 
 const strengths = [
@@ -36,7 +36,7 @@ const projects = [
 ];
 
 export const Main = async () => {
-  const sortedPosts = await getSortedPostList();
+  const sortedPosts = getUniquePostList(await getSortedPostList());
   const latestPost = sortedPosts[0];
   const latestPosts = sortedPosts.slice(1, 4);
   const hasLatestPostThumbnail = latestPost?.thumbnail?.trim() !== "";

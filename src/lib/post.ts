@@ -66,10 +66,10 @@ const sortPostList = (PostList: Post[]) => {
   return PostList.sort((a, b) => (a.date > b.date ? -1 : 1));
 };
 
-const createPostDuplicateKey = (post: Post) =>
+export const createPostDuplicateKey = (post: Post) =>
   `${post.categoryPath}:${post.title}:${dayjs(post.date).format("YYYY-MM-DD")}`;
 
-const removeDuplicatePosts = (postList: Post[]) => {
+export const getUniquePostList = (postList: Post[]) => {
   const seen = new Set<string>();
 
   return postList.filter((post) => {
@@ -92,7 +92,7 @@ export const getPostList = async (category?: string): Promise<Post[]> => {
   const postList = await Promise.all(
     postPaths.map((postPath) => parsePost(postPath))
   );
-  return removeDuplicatePosts(postList);
+  return getUniquePostList(postList);
 };
 
 export const getSortedPostList = async (category?: string) => {
