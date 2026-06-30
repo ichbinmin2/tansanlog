@@ -35,7 +35,9 @@ const projects = [
 ];
 
 export const Main = async () => {
-  const latestPosts = (await getSortedPostList()).slice(0, 3);
+  const sortedPosts = await getSortedPostList();
+  const latestPost = sortedPosts[0];
+  const latestPosts = sortedPosts.slice(0, 3);
 
   return (
     <div className='mx-auto w-full max-w-6xl px-5 pb-24 pt-16 sm:px-8 lg:pt-24'>
@@ -94,6 +96,35 @@ export const Main = async () => {
           </p>
         ))}
       </section>
+
+      {latestPost && (
+        <section className='mt-16 rounded-md border bg-secondary p-5 sm:p-7'>
+          <div className='grid gap-5 md:grid-cols-[1fr_auto] md:items-center'>
+            <div>
+              <p className='text-sm font-semibold text-green-700'>
+                Latest Article
+              </p>
+              <h2 className='mt-3 text-2xl font-semibold'>
+                {latestPost.title}
+              </h2>
+              <p className='mt-3 max-w-3xl text-sm leading-7 text-neutral-600 dark:text-neutral-300'>
+                {latestPost.desc}
+              </p>
+              <p className='mt-4 text-xs text-neutral-500'>
+                {latestPost.categoryPublicName} · {latestPost.dateString} ·{" "}
+                {latestPost.readingMinutes}분
+              </p>
+            </div>
+            <Link
+              href={latestPost.url}
+              className='inline-flex h-11 items-center justify-center gap-2 rounded-md bg-neutral-950 px-5 text-sm font-medium text-white transition hover:bg-neutral-800 dark:bg-white dark:text-neutral-950 dark:hover:bg-neutral-200'
+            >
+              최신 글 보기
+              <ArrowRight size={16} />
+            </Link>
+          </div>
+        </section>
+      )}
 
       <section className='mt-20'>
         <div className='mb-8 flex items-end justify-between gap-4'>

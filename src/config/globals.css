@@ -96,3 +96,16 @@
     text-wrap: balance;
   }
 }
+
+.admin-preview img {
+  @apply mx-auto mb-0 mt-8 max-h-[400px] w-full max-w-[700px] rounded-md object-cover shadow-lg;
+}
+
+.admin-preview img + span {
+  @apply mb-8 mt-2 block w-full text-center text-sm text-gray-500 dark:text-gray-400;
+}
+
+.admin-preview iframe,
+.admin-preview video {
+  @apply my-8 rounded-md shadow-lg;
+}
