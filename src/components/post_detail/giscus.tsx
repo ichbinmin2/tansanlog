@@ -6,17 +6,19 @@ import { useTheme } from "next-themes";
 
 const repoName = process.env.NEXT_PUBLIC_GISCUS_REPO_NAME || "";
 const repoId = process.env.NEXT_PUBLIC_GISCUS_REPO_ID || "";
+const categoryName =
+  process.env.NEXT_PUBLIC_GISCUS_CATEGORY_NAME || "Comments";
 const categoryId = process.env.NEXT_PUBLIC_GISCUS_CATEGORY_ID || "";
-const isGiscusEnabled = process.env.NEXT_PUBLIC_GISCUS_ENABLED === "true";
+const isGiscusDisabled = process.env.NEXT_PUBLIC_GISCUS_ENABLED === "false";
 
 export default function Giscus() {
   const ref = useRef<HTMLDivElement>(null);
   const { resolvedTheme } = useTheme();
   const hasGiscusConfig =
-    isGiscusEnabled && repoName !== "" && repoId !== "" && categoryId !== "";
+    !isGiscusDisabled && repoName !== "" && repoId !== "" && categoryId !== "";
 
   // https://github.com/giscus/giscus/tree/main/styles/themes
-  const theme = resolvedTheme === "dark" ? "light" : "light";
+  const theme = resolvedTheme === "dark" ? "dark" : "light";
 
   useEffect(() => {
     if (!hasGiscusConfig) return;
@@ -29,7 +31,7 @@ export default function Giscus() {
 
     scriptElem.setAttribute("data-repo", repoName);
     scriptElem.setAttribute("data-repo-id", repoId);
-    scriptElem.setAttribute("data-category", "Comments");
+    scriptElem.setAttribute("data-category", categoryName);
     scriptElem.setAttribute("data-category-id", categoryId);
     scriptElem.setAttribute("data-mapping", "pathname");
     scriptElem.setAttribute("data-strict", "0");
