@@ -66,13 +66,33 @@ const sortPostList = (PostList: Post[]) => {
   return PostList.sort((a, b) => (a.date > b.date ? -1 : 1));
 };
 
+const createPostDuplicateKey = (post: Post) =>
+  `${post.categoryPath}:${post.title}:${dayjs(post.date).format("YYYY-MM-DD")}`;
+
+const removeDuplicatePosts = (postList: Post[]) => {
+  const seen = new Set<string>();
+
+  return postList.filter((post) => {
+    const key = createPostDuplicateKey(post);
+    if (seen.has(key)) {
+      console.warn(
+        `[posts] Duplicate post skipped: ${post.title} (${post.dateString})`
+      );
+      return false;
+    }
+
+    seen.add(key);
+    return true;
+  });
+};
+
 // 모든 포스트 목록 조회. 블로그 메인 페이지에서 사용
 export const getPostList = async (category?: string): Promise<Post[]> => {
   const postPaths = getPostPaths(category);
   const postList = await Promise.all(
     postPaths.map((postPath) => parsePost(postPath))
   );
-  return postList;
+  return removeDuplicatePosts(postList);
 };
 
 export const getSortedPostList = async (category?: string) => {

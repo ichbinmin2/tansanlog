@@ -69,13 +69,6 @@ export const Main = async () => {
             >
               글 읽기
             </Link>
-            <Link
-              href='/admin'
-              className='inline-flex h-11 items-center gap-2 rounded-md border px-5 text-sm font-medium text-neutral-600 transition hover:bg-accent hover:text-neutral-950 dark:text-neutral-300 dark:hover:text-white'
-            >
-              <LockKeyhole size={16} />
-              Admin
-            </Link>
           </div>
         </div>
 
@@ -254,6 +247,13 @@ export const Main = async () => {
           >
             <Mail size={16} />
             Email
+          </Link>
+          <Link
+            href='/admin'
+            aria-label='Admin'
+            className='inline-flex h-10 items-center gap-2 rounded-md border border-white/20 px-3 text-sm text-neutral-300 transition hover:bg-white hover:text-neutral-950'
+          >
+            <LockKeyhole size={16} />
           </Link>
         </div>
       </section>

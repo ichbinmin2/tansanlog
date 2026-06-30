@@ -12,6 +12,7 @@ import {
   Download,
   Eye,
   FileText,
+  FolderOpen,
   Heading2,
   Heading3,
   ImageIcon,
@@ -26,6 +27,7 @@ import {
 import { Button } from "@/components/ui/button";
 import {
   ADMIN_DRAFT_STORAGE_KEY,
+  AdminPostSummary,
   BlogDraft,
   buildAssetPath,
   buildMdx,
@@ -33,6 +35,7 @@ import {
   createDefaultDraft,
   createSlug,
   EditorAsset,
+  parseMdxDraft,
 } from "@/lib/adminEditor";
 import { PreviewRenderer } from "./previewRenderer";
 
@@ -75,7 +78,11 @@ const getYoutubeEmbedUrl = (url: string) => {
   return id ? `https://www.youtube.com/embed/${id}` : url;
 };
 
-export const PostEditor = () => {
+interface PostEditorProps {
+  existingPosts: AdminPostSummary[];
+}
+
+export const PostEditor = ({ existingPosts }: PostEditorProps) => {
   const [draft, setDraft] = useState<BlogDraft>(() => createDefaultDraft());
   const [assets, setAssets] = useState<EditorAsset[]>([]);
   const [message, setMessage] = useState("");
@@ -87,6 +94,7 @@ export const PostEditor = () => {
   );
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
+  const mdxInputRef = useRef<HTMLInputElement>(null);
 
   const mdx = useMemo(() => buildMdx(draft), [draft]);
   const postPath = useMemo(() => buildPostPath(draft), [draft]);
@@ -94,6 +102,52 @@ export const PostEditor = () => {
     () => draft.body.match(/!\[[^\]]*]\(([^)]+)\)/)?.[1] || "",
     [draft.body]
   );
+  const validationItems = useMemo(() => {
+    const title = draft.title.trim();
+    const desc = draft.desc.trim();
+    const slug = draft.slug.trim();
+    const category = draft.category.trim();
+    const duplicateSlug = existingPosts.find(
+      (post) => post.categoryPath === category && post.slug === slug
+    );
+    const duplicateTitleDate = existingPosts.find(
+      (post) =>
+        post.categoryPath === category &&
+        post.title === title &&
+        post.date === draft.date
+    );
+
+    return [
+      { ok: title !== "", label: "제목 입력" },
+      { ok: desc !== "", label: "설명 입력" },
+      { ok: slug !== "", label: "slug 입력" },
+      { ok: category !== "", label: "카테고리 입력" },
+      {
+        ok: !duplicateSlug,
+        label: duplicateSlug
+          ? `같은 slug 글 존재: ${duplicateSlug.url}`
+          : "같은 slug 없음",
+      },
+      {
+        ok: !duplicateTitleDate,
+        label: duplicateTitleDate
+          ? `같은 제목/날짜 글 존재: ${duplicateTitleDate.url}`
+          : "같은 제목/날짜 없음",
+      },
+      {
+        ok: /^##\s+/.test(draft.body.trim()),
+        label: "본문 첫 제목(##) 입력",
+      },
+      {
+        ok:
+          draft.thumbnail.trim() === "" ||
+          draft.thumbnail.startsWith("/") ||
+          draft.thumbnail.startsWith("http"),
+        label: "썸네일 경로 형식 확인",
+      },
+    ];
+  }, [draft, existingPosts]);
+  const hasBlockingValidation = validationItems.some((item) => !item.ok);
 
   useEffect(() => {
     const savedDraft = window.localStorage.getItem(ADMIN_DRAFT_STORAGE_KEY);
@@ -235,6 +289,11 @@ export const PostEditor = () => {
   };
 
   const saveToProject = async () => {
+    if (hasBlockingValidation) {
+      setMessage("발행 전 검증 항목을 먼저 확인해주세요.");
+      return;
+    }
+
     const picker = (window as any).showDirectoryPicker as
       | (() => Promise<DirectoryHandle>)
       | undefined;
@@ -275,6 +334,16 @@ export const PostEditor = () => {
     setMessage("본문의 첫 번째 이미지를 썸네일로 설정했습니다.");
   };
 
+  const handleMdxFile = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const loadedDraft = parseMdxDraft(await file.text());
+    updateDraft(loadedDraft);
+    setMessage(`${file.name} 파일을 에디터로 불러왔습니다.`);
+    event.target.value = "";
+  };
+
   const logout = async () => {
     await fetch("/api/admin/logout", { method: "POST" });
     window.location.href = "/admin/login";
@@ -300,6 +369,13 @@ export const PostEditor = () => {
             <Download className='mr-2 size-4' />
             MDX 다운로드
           </Button>
+          <Button
+            variant='outline'
+            onClick={() => mdxInputRef.current?.click()}
+          >
+            <FolderOpen className='mr-2 size-4' />
+            MDX 불러오기
+          </Button>
           <Button asChild variant='outline'>
             <Link href='/admin/preview'>
               <Eye className='mr-2 size-4' />
@@ -314,6 +390,13 @@ export const PostEditor = () => {
             <LogOut className='mr-2 size-4' />
             로그아웃
           </Button>
+          <input
+            ref={mdxInputRef}
+            type='file'
+            accept='.md,.mdx,text/markdown'
+            className='hidden'
+            onChange={handleMdxFile}
+          />
         </div>
       </div>
 
@@ -409,6 +492,19 @@ export const PostEditor = () => {
                 {assets.length}개 저장 확인
               </li>
               <li>○ git commit / push 후 배포 확인</li>
+            </ul>
+          </div>
+          <div className='rounded-md border p-4 text-sm leading-7 lg:col-span-2'>
+            <p className='font-medium'>발행 전 검증</p>
+            <ul className='mt-2 space-y-1 text-neutral-600 dark:text-neutral-300'>
+              {validationItems.map((item) => (
+                <li
+                  key={item.label}
+                  className={item.ok ? "" : "font-medium text-red-600"}
+                >
+                  {item.ok ? "✓" : "!"} {item.label}
+                </li>
+              ))}
             </ul>
           </div>
           {message && (

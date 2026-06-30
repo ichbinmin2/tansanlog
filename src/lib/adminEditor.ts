@@ -14,6 +14,14 @@ export interface EditorAsset {
   dataUrl: string;
 }
 
+export interface AdminPostSummary {
+  categoryPath: string;
+  slug: string;
+  title: string;
+  date: string;
+  url: string;
+}
+
 export const ADMIN_DRAFT_STORAGE_KEY = "tansanlog:admin-draft";
 
 export const createTodayString = () => new Date().toISOString().slice(0, 10);
@@ -68,3 +76,30 @@ export const buildPostPath = (draft: BlogDraft) =>
 export const buildAssetPath = (category: string, fileName: string) =>
   `/posts/${category || "diary"}/${fileName}`;
 
+export const parseMdxDraft = (source: string): BlogDraft => {
+  const frontmatter = source.match(/^---\n([\s\S]*?)\n---\n?/);
+  const body = frontmatter ? source.slice(frontmatter[0].length) : source;
+  const data = new Map<string, string>();
+
+  frontmatter?.[1].split("\n").forEach((line) => {
+    const separatorIndex = line.indexOf(":");
+    if (separatorIndex === -1) return;
+
+    data.set(
+      line.slice(0, separatorIndex).trim(),
+      line.slice(separatorIndex + 1).trim()
+    );
+  });
+
+  const title = data.get("title") || "";
+
+  return {
+    title,
+    date: data.get("date") || createTodayString(),
+    desc: data.get("desc") || "",
+    category: "diary",
+    slug: createSlug(title),
+    thumbnail: data.get("thumbnail") || "",
+    body: body.trim(),
+  };
+};

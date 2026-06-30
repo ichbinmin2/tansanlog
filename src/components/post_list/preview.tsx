@@ -6,15 +6,29 @@ import { CalendarDays, Clock3 } from "lucide-react";
 
 interface Props {
   post: Post;
+  variant?: "default" | "featured";
 }
 
-const Preview = ({ post }: Props) => {
+const Preview = ({ post, variant = "default" }: Props) => {
   const hasThumbnail = post.thumbnail?.trim() !== "";
+  const isFeatured = variant === "featured";
 
   return (
     <Link href={post.url}>
-      <li className='flex h-full flex-col gap-3 overflow-hidden rounded-md border shadow-md transition hover:shadow-xl dark:border-slate-700 dark:hover:border-white'>
-        <div className='relative aspect-video w-full rounded-t-md border-b'>
+      <li
+        className={
+          isFeatured
+            ? "grid overflow-hidden rounded-md border shadow-md transition hover:shadow-xl dark:border-slate-700 dark:hover:border-white md:grid-cols-[1.05fr_0.95fr]"
+            : "flex h-full flex-col gap-3 overflow-hidden rounded-md border shadow-md transition hover:shadow-xl dark:border-slate-700 dark:hover:border-white"
+        }
+      >
+        <div
+          className={
+            isFeatured
+              ? "relative aspect-video w-full border-b md:border-b-0 md:border-r"
+              : "relative aspect-video w-full rounded-t-md border-b"
+          }
+        >
           {hasThumbnail ? (
             <Image
               src={post.thumbnail}
@@ -37,14 +51,31 @@ const Preview = ({ post }: Props) => {
             </div>
           )}
         </div>
-        <div className='flex flex-1 flex-col justify-between p-4 pt-1'>
+        <div
+          className={
+            isFeatured
+              ? "flex flex-1 flex-col justify-center p-6"
+              : "flex flex-1 flex-col justify-between p-4 pt-1"
+          }
+        >
           <div>
             <div className='text-sm font-medium text-green-700 lg:text-base'>
               {post.categoryPublicName}
             </div>
-            <h2 className='mb-3 mt-1 text-lg font-bold sm:text-xl md:text-lg'>
+            <h2
+              className={
+                isFeatured
+                  ? "mb-3 mt-2 text-2xl font-bold"
+                  : "mb-3 mt-1 text-lg font-bold sm:text-xl md:text-lg"
+              }
+            >
               {post.title}
             </h2>
+            {isFeatured && (
+              <p className='mb-5 line-clamp-3 text-sm leading-7 text-neutral-600 dark:text-neutral-300'>
+                {post.desc}
+              </p>
+            )}
           </div>
           <div className='flex justify-between gap-3 text-sm text-gray-500 dark:text-gray-400'>
             <div className='flex items-center gap-1'>
