@@ -8,11 +8,12 @@ import * as THREE from "three";
 const canCreateWebGLContext = () => {
   try {
     const canvas = document.createElement("canvas");
-    return Boolean(
-      canvas.getContext("webgl2") ||
-        canvas.getContext("webgl") ||
-        canvas.getContext("experimental-webgl")
-    );
+    const context = (canvas.getContext("webgl2") ||
+      canvas.getContext("webgl") ||
+      canvas.getContext("experimental-webgl")) as WebGLRenderingContext | null;
+
+    context?.getExtension("WEBGL_lose_context")?.loseContext();
+    return Boolean(context);
   } catch {
     return false;
   }
@@ -88,6 +89,10 @@ export const Graphic = () => {
   useEffect(() => {
     setIsWebGLAvailable(canCreateWebGLContext());
   }, []);
+
+  if (isWebGLAvailable === null) {
+    return null;
+  }
 
   if (!isWebGLAvailable) {
     return <GraphicFallback />;
