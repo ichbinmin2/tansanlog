@@ -95,6 +95,140 @@
   .text-balance {
     text-wrap: balance;
   }
+
+  .ambient-grid {
+    background-image:
+      linear-gradient(to right, rgb(15 23 42 / 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(15 23 42 / 0.05) 1px, transparent 1px);
+    background-size: 72px 72px;
+    mask-image: linear-gradient(to bottom, transparent, black 16%, black 78%, transparent);
+  }
+
+  .dark .ambient-grid {
+    background-image:
+      linear-gradient(to right, rgb(255 255 255 / 0.07) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.07) 1px, transparent 1px);
+  }
+
+  .reveal-up {
+    animation: reveal-up 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .reveal-up-delay-1 {
+    animation-delay: 90ms;
+  }
+
+  .reveal-up-delay-2 {
+    animation-delay: 180ms;
+  }
+
+  .reveal-up-delay-3 {
+    animation-delay: 270ms;
+  }
+
+  .surface-shine {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .surface-shine::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(
+      115deg,
+      transparent 0%,
+      transparent 34%,
+      rgb(255 255 255 / 0.42) 45%,
+      transparent 56%,
+      transparent 100%
+    );
+    transform: translateX(-140%);
+    transition: transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .dark .surface-shine::before {
+    background: linear-gradient(
+      115deg,
+      transparent 0%,
+      transparent 34%,
+      rgb(255 255 255 / 0.13) 45%,
+      transparent 56%,
+      transparent 100%
+    );
+  }
+
+  .surface-shine:hover::before {
+    transform: translateX(140%);
+  }
+
+  .scanline {
+    position: relative;
+  }
+
+  .scanline::after {
+    content: "";
+    position: absolute;
+    inset-inline: 16px;
+    top: 16px;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgb(22 163 74 / 0.55),
+      rgb(15 23 42 / 0.2),
+      transparent
+    );
+    animation: scanline 3.8s ease-in-out infinite;
+  }
+
+  .dark .scanline::after {
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgb(74 222 128 / 0.65),
+      rgb(255 255 255 / 0.16),
+      transparent
+    );
+  }
+}
+
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(22px) scale(0.98);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes scanline {
+  0%,
+  100% {
+    opacity: 0.15;
+    transform: translateY(0) scaleX(0.75);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(282px) scaleX(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-up,
+  .scanline::after {
+    animation: none;
+  }
+
+  .surface-shine::before {
+    display: none;
+  }
 }
 
 .admin-preview img {

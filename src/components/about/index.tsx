@@ -1,264 +1,182 @@
 "use client";
 
+import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
+const experiences = [
+  {
+    period: "2022.8 - 2024.9",
+    title: "Front End Engineer - UniqueGood",
+    href: "https://realworld.to/",
+    description:
+      "리얼월드 모바일 앱과 연결되는 웹 페이지를 개발하며 웹뷰, 소셜 기능, 크리에이터 채널 페이지의 사용자 경험을 다듬었습니다. Safari WebView 이슈와 다양한 브라우저 환경 대응 경험을 쌓았습니다.",
+    stack: ["React", "Next.js", "TypeScript", "Tailwind"],
+  },
+  {
+    period: "2021.5 - 2021.7",
+    title: "Front End Engineer - Welly",
+    href: "https://www.welly.rest/",
+    description:
+      "오디오 플레이어, 이벤트 페이지, 상품 구매 페이지를 구현했습니다. Storybook으로 공용 UI 상태를 관리하고 Sentry 기반 에러 대응 흐름을 경험했습니다.",
+    stack: ["React", "Next.js", "TypeScript", "Styled-Components"],
+  },
+  {
+    period: "2020.11 - 2020.12",
+    title: "Front End Engineer Intern - Rencar",
+    href: "https://rencar.co.kr/intro",
+    description:
+      "쿼리스트링 기반 검색 기능과 백엔드 API 데이터 통신을 구현하며 프론트엔드 개발의 기본 흐름을 익혔습니다.",
+    stack: ["React", "Next.js", "SASS"],
+  },
+];
+
+const sideProjects = [
+  {
+    period: "2024.9 - 2025.1",
+    title: "Keep in touch",
+    href: "https://decisive-aftermath-f41.notion.site/12884f40191d804caf64d1957abb3a93?pvs=4",
+    description:
+      "연락이 닿지 않는 친구에게 메시지를 남기는 서비스의 프론트엔드 구조와 주요 화면을 구현했습니다.",
+    stack: ["React", "Next.js", "TypeScript", "Tailwind", "Vitest"],
+  },
+  {
+    period: "2024.10 - Present",
+    title: "Tansanlog",
+    href: "https://tansanlog.vercel.app/",
+    description:
+      "기술 학습과 기록을 위한 개인 블로그입니다. MDX 글 관리, 어드민 에디터, 댓글, Three.js 시각 요소를 연결했습니다.",
+    stack: ["Next.js", "MDX", "Three.js", "Tailwind"],
+  },
+  {
+    period: "2021.2",
+    title: "Card Maker",
+    href: "https://603ce6b8d579f1f8067c72df--teta-cardmaker.netlify.app/",
+    description:
+      "지인의 정보를 카드로 입력하고 저장, 관리하는 웹사이트 토이 프로젝트입니다.",
+    stack: ["React", "PostCSS", "Firebase", "Cloudinary"],
+  },
+  {
+    period: "2021.1",
+    title: "Tetatube",
+    href: "https://ichbinmin2.github.io/tetatube/",
+    description:
+      "YouTube API를 활용해 영상 스트리밍 페이지의 주요 기능을 React로 구현했습니다.",
+    stack: ["React", "PostCSS"],
+  },
+];
+
+const values = ["UX 관점", "구현 품질", "문서화", "협업 흐름"];
+
+const TimelineCard = ({
+  item,
+}: {
+  item: {
+    period: string;
+    title: string;
+    href: string;
+    description: string;
+    stack: string[];
+  };
+}) => {
+  return (
+    <article className='surface-shine rounded-2xl bg-neutral-950/[0.03] p-5 ring-1 ring-neutral-950/5 transition duration-500 ease-out hover:-translate-y-1 hover:shadow-[0_22px_70px_rgba(15,23,42,0.10)] dark:bg-white/[0.04] dark:ring-white/10'>
+      <p className='text-xs text-neutral-500'>{item.period}</p>
+      <Link
+        href={item.href}
+        className='mt-3 inline-flex items-center gap-2 text-base font-semibold transition hover:text-green-700 dark:hover:text-green-300'
+      >
+        {item.title}
+        <ArrowUpRight size={15} />
+      </Link>
+      <p className='mt-3 text-sm leading-7 text-neutral-600 dark:text-neutral-300'>
+        {item.description}
+      </p>
+      <div className='mt-5 flex flex-wrap gap-2'>
+        {item.stack.map((stack) => (
+          <span
+            key={stack}
+            className='rounded-full border border-neutral-200 bg-white/60 px-2.5 py-1 text-[11px] font-medium text-neutral-500 dark:border-white/10 dark:bg-white/[0.04] dark:text-neutral-300'
+          >
+            {stack}
+          </span>
+        ))}
+      </div>
+    </article>
+  );
+};
+
 export default function About() {
   return (
-    <section className='flex m-auto pt-[115px] pb-[115px] max-w-[500px] h-full flex-col gap-8'>
-      {/* 상단 이미지 프로필 섹션 */}
-      <div className='p-3'>
-        <div className='flex justify-start items-center'>
-          <div className='m-5'>
-            <Image
-              className='rounded-[50%]'
-              src='/about/profile.png'
-              alt='profile'
-              width={100}
-              height={100}
-            />
-          </div>
+    <section className='relative mx-auto w-full max-w-5xl px-5 pb-24 pt-24 sm:px-8 lg:pt-32'>
+      <div className='ambient-grid pointer-events-none absolute inset-x-0 top-0 h-[520px]' />
 
-          <div className='flex-col'>
-            <h1 className='text-lg font-semibold'>Min Jiyeon</h1>
-            <p>Frontend Developer</p>
+      <div className='relative z-10 grid gap-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-end'>
+        <div className='reveal-up rounded-[1.75rem] bg-neutral-950/[0.03] p-2 ring-1 ring-neutral-950/5 dark:bg-white/[0.04] dark:ring-white/10'>
+          <div className='rounded-[1.25rem] bg-white/75 p-6 shadow-[inset_0_1px_1px_rgba(255,255,255,0.85)] backdrop-blur dark:bg-neutral-950/70'>
+            <Image
+              className='rounded-full ring-1 ring-neutral-950/10 dark:ring-white/10'
+              src='/about/profile.png'
+              alt='Min Jiyeon profile'
+              width={104}
+              height={104}
+              priority
+            />
+            <p className='mt-6 text-sm font-semibold text-green-700'>
+              Frontend Developer
+            </p>
+            <h1 className='mt-2 text-3xl font-semibold'>Min Jiyeon</h1>
+            <p className='mt-4 text-sm leading-7 text-neutral-600 dark:text-neutral-300'>
+              디자이너에서 프론트엔드 개발자로 전환한 배경을 바탕으로, 화면의
+              맥락과 사용자의 흐름을 읽으며 구현 품질을 다듬습니다.
+            </p>
+            <div className='mt-6 flex flex-wrap gap-2'>
+              {values.map((value) => (
+                <span
+                  key={value}
+                  className='rounded-full bg-green-700/10 px-3 py-1.5 text-xs font-medium text-green-700 dark:bg-green-300/10 dark:text-green-300'
+                >
+                  {value}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
-        {/* 내 소개 */}
-        <div className='mb-[49px]'>
-          <h2 className='font-medium'>About</h2>
-          <p className='text-sm'>
-            &quot;디자이너에서 개발자로, 사용자 중심의 문제 해결사&quot; <br />
-            <br />
-            디자이너 출신 2년 차 프론트엔드 개발자로서, 사용자 경험과 팀의
-            생산성을 극대화하는 것을 목표로 합니다. 디자인과 개발의 관점을 모두
-            이해하며, 효율적인 협업 문화를 이끌고 체계적인 문서화로 팀 내 신뢰를
-            쌓아왔습니다.
-            <br />
-            <br /> 주어진 문제에 Why를 고민하며 구체적이고 실질적인 해결책을
-            제시하고자 합니다. 다양한 사회 경험을 바탕으로 빠른 상황 파악과 문제
-            해결 능력을 토대로, 프로젝트의 전반적인 방향성과 품질을 주도적으로
-            관리하며 성과를 내고자 합니다. <br />
-            <br />
-            또한, 개발 환경 개선과 새로운 기술 도입을 통해 팀의 생산성을 높이고,
-            꼼꼼한 디테일과 책임감을 바탕으로 신뢰받는 결과물을 만드는 것을
-            목표로 하고 있습니다.
+
+        <div className='reveal-up reveal-up-delay-1'>
+          <p className='text-sm font-semibold text-green-700'>About</p>
+          <h2 className='mt-3 max-w-2xl text-3xl font-semibold leading-tight text-balance sm:text-4xl'>
+            사용자 중심의 문제 해결과 협업하기 좋은 구조를 함께 고민합니다.
+          </h2>
+          <p className='mt-6 max-w-2xl text-sm leading-8 text-neutral-600 dark:text-neutral-300 sm:text-base'>
+            주어진 문제의 Why를 먼저 살피고, 구체적인 해결책을 화면과 코드로
+            연결하는 것을 좋아합니다. 문서화와 UI 상태 정리를 통해 팀이 더 빠르게
+            이해하고 유지보수할 수 있는 흐름을 만드는 데 관심이 있습니다.
           </p>
         </div>
-        {/* 경력 사항 */}
-        <div className='flex flex-col gap-7'>
-          <h2 className='font-medium'>Work Experience</h2>
-          {/* 리얼월드 */}
-          <div className='grid grid-cols-1 xxs:grid-cols-[1fr_3fr] gap-1'>
-            <p className='text-sm xxs:col-span-1 text-neutral-500'>
-              2022.8 - 2024.9
-            </p>
-            <div className='flex flex-col xxs:ol-span-2 gap-1'>
-              <Link
-                href='https://realworld.to/'
-                className='flex justify-start items-center gap-1'
-              >
-                <h2 className='font-medium text-sm hover:underline transition duration-300 ease-in-out'>
-                  Front End Engineer – UniqueGood
-                </h2>
-                <Image
-                  width={8}
-                  height={8}
-                  src='/about/up-right-arrow.png'
-                  alt='arrow-link'
-                />
-              </Link>
-              <p className='text-sm'>
-                리얼월드 모바일 앱 연동 웹 페이지를 개발하며 다양한 디바이스와
-                브라우저에 호환성을 확보하였고 ‘토닥토닥 포토월 프로젝트’와 ‘웹
-                플레이 프로젝트’의 주요 개발 업무를 수행하여 유저 경험 강화에
-                기여했습니다. 리얼월드 모바일 앱 UX/UI와 동일한 사용자 경험을
-                제공하는 웹 버전 홈페이지 개발을 주도하고, 소셜 기능(프로필,
-                친구 맺기), 크리에이터 채널 페이지 개발을 통해 유저 간 네트워킹
-                경험을 상승시켰으며, Safari Webview에서 발생하는 크로스브라우징
-                이슈 해결 경험이 다수 있습니다.
-              </p>
-              <span className='text-sm text-neutral-500'>
-                React • Next.js • TypeScript • Tailwind
-              </span>
-            </div>
-          </div>
+      </div>
 
-          <div className='grid grid-cols-1 xxs:grid-cols-[1fr_3fr] gap-1'>
-            <p className='text-sm xxs:col-span-1 text-neutral-500'>
-              2021.5 - 2021.7
-            </p>
-            <div className='flex flex-col xxs:ol-span-2 gap-1'>
-              <Link
-                href='https://www.welly.rest/'
-                className='flex justify-start items-center gap-1'
-              >
-                <h2 className='font-medium text-sm hover:underline transition duration-300 ease-in-out'>
-                  Front End Engineer – Welly
-                </h2>
-                <Image
-                  width={8}
-                  height={8}
-                  src='/about/up-right-arrow.png'
-                  alt='arrow-link'
-                />
-              </Link>
-              <p className='text-sm'>
-                카카오 소셜 로그인 기반의 오디오 플레이어 페이지와 이벤트 페이지
-                및 상품 구매 페이지 개발하였습니다. Storybook으로 공용 UI 상태와
-                컴포넌트를 체계적으로 관리하고 Airtable을 통해 프로젝트 데이터를
-                관리했고, Sentry로 실시간으로 에러에 대응했습니다.
-              </p>
-              <span className='text-sm text-neutral-500'>
-                React • Next.js • TypeScript • Styled-Components
-              </span>
-            </div>
-          </div>
-
-          {/* // 인탄 */}
-          <div className='grid grid-cols-1 xxs:grid-cols-[1fr_3fr] gap-1'>
-            <p className='text-sm xxs:col-span-1 text-neutral-500'>
-              2020.11 - 2020.12
-            </p>
-            <div className='flex flex-col xxs:ol-span-2 gap-1'>
-              <Link
-                href='https://rencar.co.kr/intro'
-                className='flex justify-start items-center gap-1'
-              >
-                <h2 className='font-medium text-sm hover:underline transition duration-300 ease-in-out'>
-                  Front End Engineer Intern – Rencar
-                </h2>
-                <Image
-                  width={8}
-                  height={8}
-                  src='/about/up-right-arrow.png'
-                  alt='arrow-link'
-                />
-              </Link>
-              <p className='text-sm'>
-                쿼리스트링을 활용해 백엔드 API 데이터 통신 및 검색 기능을
-                구현했습니다.
-              </p>
-              <span className='text-sm text-neutral-500'>
-                React • Next.js • SASS
-              </span>
-            </div>
-          </div>
+      <div className='relative z-10 mt-16'>
+        <div className='mb-6'>
+          <p className='text-sm font-semibold text-green-700'>Experience</p>
+          <h2 className='mt-2 text-2xl font-semibold'>경력 사항</h2>
         </div>
+        <div className='grid gap-4'>
+          {experiences.map((item) => (
+            <TimelineCard key={item.title} item={item} />
+          ))}
+        </div>
+      </div>
 
-        {/* 사이드프로젝트 */}
-        <div className='flex flex-col gap-7 mt-[49px]'>
-          <h2 className='font-medium'>Side Projects</h2>
-          <div className='grid grid-cols-1 xxs:grid-cols-[1fr_3fr] gap-1'>
-            <p className='text-sm xxs:col-span-1 text-neutral-500'>
-              2024.9 - 2025.1
-            </p>
-            <div className='flex flex-col xxs:ol-span-2 gap-1'>
-              <Link
-                href='https://decisive-aftermath-f41.notion.site/12884f40191d804caf64d1957abb3a93?pvs=4'
-                className='flex justify-start items-center gap-1'
-              >
-                <h2 className='font-medium text-sm inline'>
-                  너에게 닿기를(Keep in touch)
-                </h2>
-                <Image
-                  width={8}
-                  height={8}
-                  src='/about/up-right-arrow.png'
-                  alt='arrow-link'
-                />
-              </Link>
-
-              <p className='text-sm'>
-                연락이 닿지 않는 친구 및 지인에게 메세지를 남기는 서비스의
-                프론트엔드 개발을 맡았습니다.
-              </p>
-              <span className='text-sm text-neutral-500'>
-                React • Next.js • TypeScript • Tailwind • Vitest
-              </span>
-            </div>
-          </div>
-
-          <div className='grid grid-cols-1 xxs:grid-cols-[1fr_3fr] gap-1'>
-            <p className='text-sm xxs:col-span-1 text-neutral-500'>
-              2024.10 - (ing)
-            </p>
-            <div className='flex flex-col xxs:ol-span-2 gap-1'>
-              <Link
-                href='https://tansanlog.vercel.app/'
-                className='flex justify-start items-center gap-1'
-              >
-                <h2 className='font-medium text-sm hover:underline transition duration-300 ease-in-out'>
-                  Tansanlog
-                </h2>
-                <Image
-                  width={8}
-                  height={8}
-                  src='/about/up-right-arrow.png'
-                  alt='arrow-link'
-                />
-              </Link>
-              <p className='text-sm'>
-                기술 학습 및 아카이빙 용도의 개인 블로그를 제작했습니다.
-              </p>
-              <span className='text-sm text-neutral-500'>
-                React • Next.js • TypeScript • Three.js • Tailwind
-              </span>
-            </div>
-          </div>
-
-          {/* // */}
-          <div className='grid grid-cols-1 xxs:grid-cols-[1fr_3fr] gap-1'>
-            <p className='text-sm xxs:col-span-1 text-neutral-500'>2021.2</p>
-            <div className='flex flex-col xxs:ol-span-2 gap-1'>
-              <Link
-                href='https://603ce6b8d579f1f8067c72df--teta-cardmaker.netlify.app/'
-                className='flex justify-start items-center gap-1'
-              >
-                <h2 className='font-medium text-sm hover:underline transition duration-300 ease-in-out'>
-                  Card Maker
-                </h2>
-                <Image
-                  width={8}
-                  height={8}
-                  src='/about/up-right-arrow.png'
-                  alt='arrow-link'
-                />
-              </Link>
-              <p className='text-sm'>
-                지인의 정보를 card로 담아 입력하고, 입력한 데이터를
-                저장/관리하는 웹사이트 토이 프로젝트입니다.
-              </p>
-              <span className='text-sm text-neutral-500'>
-                React • PostCSS • Firebase • Cloudinary
-              </span>
-            </div>
-          </div>
-
-          <div className='grid grid-cols-1 xxs:grid-cols-[1fr_3fr] gap-1'>
-            <p className='text-sm xxs:col-span-1 text-neutral-500'>2021.1</p>
-            <div className='flex flex-col xxs:ol-span-2 gap-1'>
-              <Link
-                href='https://ichbinmin2.github.io/tetatube/'
-                className='flex justify-start items-center gap-1'
-              >
-                <h2 className='font-medium text-sm hover:underline transition duration-300 ease-in-out'>
-                  Tetatube
-                </h2>
-                <Image
-                  width={8}
-                  height={8}
-                  src='/about/up-right-arrow.png'
-                  alt='arrow-link'
-                />
-              </Link>
-              <p className='text-sm'>
-                YouTube의 API를 이용하여 영상 스트리밍 페이지의 기능을 React로
-                구현하는 토이 프로젝트입니다.
-              </p>
-              <span className='text-sm text-neutral-500'>React • PostCSS</span>
-            </div>
-          </div>
+      <div className='relative z-10 mt-16'>
+        <div className='mb-6'>
+          <p className='text-sm font-semibold text-green-700'>Side Projects</p>
+          <h2 className='mt-2 text-2xl font-semibold'>사이드 프로젝트</h2>
+        </div>
+        <div className='grid gap-4 md:grid-cols-2'>
+          {sideProjects.map((item) => (
+            <TimelineCard key={item.title} item={item} />
+          ))}
         </div>
       </div>
     </section>

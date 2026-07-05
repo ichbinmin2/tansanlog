@@ -33,7 +33,7 @@ const SearchablePostGrid = ({ posts }: SearchablePostGridProps) => {
 
   return (
     <section>
-      <label className='mb-8 flex h-11 items-center gap-2 rounded-md border px-3 text-sm'>
+      <label className='mb-3 flex h-12 items-center gap-2 rounded-full border border-neutral-200 bg-white px-4 text-sm shadow-[0_12px_40px_rgba(15,23,42,0.05)] transition duration-300 ease-out focus-within:border-neutral-950 dark:border-white/10 dark:bg-neutral-950 dark:focus-within:border-white'>
         <Search className='size-4 text-neutral-500' />
         <input
           value={query}
@@ -42,9 +42,8 @@ const SearchablePostGrid = ({ posts }: SearchablePostGridProps) => {
           placeholder='글 제목, 설명, 카테고리 검색'
         />
       </label>
-
       {filteredPosts.length > 0 ? (
-        <ul className='grid grid-cols-1 gap-8 md:grid-cols-3 lg:gap-12'>
+        <ul className='mt-8 grid grid-cols-1 gap-8 md:grid-cols-3 lg:gap-12'>
           {filteredPosts.map((post) => {
             return <Preview key={post.url + post.date} post={post} />;
           })}
@@ -59,4 +58,3 @@ const SearchablePostGrid = ({ posts }: SearchablePostGridProps) => {
 };
 
 export default SearchablePostGrid;
-
